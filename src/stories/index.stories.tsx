@@ -19,7 +19,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story<Props> = args => <Editor {...args} />;
+const Template: Story<Props> = (args) => <Editor {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
@@ -121,16 +121,29 @@ Notices.args = {
 There are three types of editable notice blocks that can be used to callout information:
 
 \\
-:::info
+:::{notice}{info}
 Informational
 :::
 
-:::tip
+:::{notice}{tip}
 Tip
 :::
 
-:::warning
+
+:::{notice}{warning}
 Warning
+:::
+`,
+};
+
+export const Measures = Template.bind({});
+Measures.args = {
+  defaultValue: `# Measures
+
+
+\\
+:::{measure}{single}
+Single Item Measure
 :::
 `,
 };
@@ -174,7 +187,7 @@ Persisted.args = {
     `# Persisted
   
 The contents of this editor are persisted to local storage on change (edit and reload)`,
-  onChange: debounce(value => {
+  onChange: debounce((value) => {
     const text = value();
     localStorage.setItem("saved", text);
   }, 250),

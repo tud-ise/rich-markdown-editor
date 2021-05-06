@@ -45,7 +45,7 @@ test("renders bullet list", () => {
 
 test("renders info notice", () => {
   expect(
-    renderToHtml(`:::info
+    renderToHtml(`:::{notice}{info}
 content of notice
 :::`)
   ).toMatchSnapshot();
@@ -53,7 +53,7 @@ content of notice
 
 test("renders warning notice", () => {
   expect(
-    renderToHtml(`:::warning
+    renderToHtml(`:::{notice}{warning}
 content of notice
 :::`)
   ).toMatchSnapshot();
@@ -61,7 +61,7 @@ content of notice
 
 test("renders tip notice", () => {
   expect(
-    renderToHtml(`:::tip
+    renderToHtml(`:::{notice}{tip}
 content of notice
 :::`)
   ).toMatchSnapshot();

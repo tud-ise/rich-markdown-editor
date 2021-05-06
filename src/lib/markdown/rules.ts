@@ -5,6 +5,7 @@ import embedsPlugin from "./embeds";
 import breakPlugin from "./breaks";
 import tablesPlugin from "./tables";
 import noticesPlugin from "./notices";
+import measuresPlugin from "./measures";
 import underlinesPlugin from "./underlines";
 
 export default function rules({ embeds }) {
@@ -20,5 +21,7 @@ export default function rules({ embeds }) {
     .use(markPlugin({ delim: "!!", mark: "placeholder" }))
     .use(underlinesPlugin)
     .use(tablesPlugin)
-    .use(noticesPlugin);
+    .use(noticesPlugin)
+    .use(measuresPlugin);
+
 }

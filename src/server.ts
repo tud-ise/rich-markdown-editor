@@ -34,6 +34,7 @@ import Link from "./marks/Link";
 import Strikethrough from "./marks/Strikethrough";
 import TemplatePlaceholder from "./marks/Placeholder";
 import Underline from "./marks/Underline";
+import Measure from './nodes/Measure';
 
 const extensions = new ExtensionManager([
   new Doc(),
@@ -49,6 +50,7 @@ const extensions = new ExtensionManager([
   new Embed(),
   new ListItem(),
   new Notice(),
+  new Measure(),
   new Heading(),
   new HorizontalRule(),
   new Image(),

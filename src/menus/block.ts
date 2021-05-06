@@ -18,6 +18,7 @@ import {
 } from "outline-icons";
 import { MenuItem } from "../types";
 import baseDictionary from "../dictionary";
+import Measure from '../nodes/Measure';
 
 const SSR = typeof window === "undefined";
 const isMac = !SSR && window.navigator.platform === "MacIntel";
@@ -146,5 +147,9 @@ export default function blockMenuItems(
       keywords: "container_notice card suggestion",
       attrs: { style: "tip" },
     },
+    {
+      name: "separator",
+    },
+    ...Measure.blockMenuItems,
   ];
 }
