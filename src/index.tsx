@@ -28,6 +28,8 @@ import headingToSlug from "./lib/headingToSlug";
 
 // measures
 import "./nodes/measures/SingleValue";
+import "./nodes/measures/RadioGroup";
+import "./nodes/measures/GridBased";
 
 // nodes
 import ReactNode from "./nodes/ReactNode";
@@ -933,8 +935,11 @@ const StyledEditor = styled("div")<{
 
   .notice-block,
   .measure-block {
-    display: flex;
-    align-items: center;
+    :not(.measure-block) {
+      display: flex;
+      align-items: center;
+    }
+
     background: ${(props) => props.theme.noticeInfoBackground};
     color: ${(props) => props.theme.noticeInfoText};
     border-radius: 4px;
@@ -955,7 +960,13 @@ const StyledEditor = styled("div")<{
     flex-grow: 1;
   }
 
-  .notice-block .icon {
+  .notice-block,
+  .measure-block .controls {
+    padding: 4px 8px;
+  }
+
+  .notice-block,
+  .measure-block .icon {
     width: 24px;
     height: 24px;
     align-self: flex-start;

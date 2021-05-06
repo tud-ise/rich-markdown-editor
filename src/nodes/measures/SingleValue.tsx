@@ -5,23 +5,40 @@ import { BeakerIcon } from "outline-icons";
 
 // define all single value measures with their respective validator
 const singleValueMeasuresScaffold = [
-  { label: "Text", className: "text", validator: () => true },
-  { label: "Decimal", className: "decimal", validator: () => true },
-  { label: "Float", className: "float", validator: () => true },
-  { label: "Date", className: "date", validator: () => true },
+  { label: "Text", className: "text", htmlType: "text", validator: () => true },
+  {
+    label: "Decimal",
+    className: "decimal",
+    htmlType: "number",
+    validator: () => true,
+  },
+  {
+    label: "Float",
+    className: "float",
+    htmlType: "number",
+    validator: () => true,
+  },
+  { label: "Date", className: "date", htmlType: "date", validator: () => true },
+  {
+    label: "Percentage",
+    className: "percentage",
+    htmlType: "number",
+    validator: () => true,
+  },
 ] as const;
 
 const registerSingleValueMeasureDelegate = (
   {
     className,
     label,
+    htmlType,
   }: Omit<typeof singleValueMeasuresScaffold[number], "validator">,
   validator: (value: any) => boolean
 ) => {
   Measure.registerDelegate(`single-${className}`, {
     label: `Single ${label} Value`,
-    builder: (node: Node, { readOnly }) => {
-      return <div style={{}}></div>;
+    builder: ({}, { readOnly }) => {
+      return <input type={htmlType} disabled={!readOnly}></input>;
     },
     menuItem: {
       icon: BeakerIcon,
