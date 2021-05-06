@@ -285,6 +285,7 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
         }),
         new Measure({
           dictionary,
+          readOnly: this.props.readOnly,
         }),
         new Heading({
           dictionary,

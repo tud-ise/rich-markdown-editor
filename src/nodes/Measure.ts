@@ -9,9 +9,11 @@ import { MenuItem } from '../types';
 export type ChildBuilder = {
   label: string;
   className: string;
-  builder: (n: ProsemirrorNode, options: Partial<typeof base>) => JSX.Element;
-  iconBuilder?: (n: ProsemirrorNode, options: Partial<typeof base>) => JSX.Element;
-} & Partial<Omit<MenuItem, "title" | "attrs">>;
+  builder: (n: ProsemirrorNode, options: Partial<typeof base> & {
+    readOnly: boolean;
+  }) => JSX.Element;
+  menuItem: Omit<MenuItem, "title" | "attrs">;
+};
 
 export default class Measure extends Node {
   private static readonly delegates: Record<string, ChildBuilder> = {};
@@ -26,14 +28,16 @@ export default class Measure extends Node {
   }
 
   static get blockMenuItems(): MenuItem[] {
-    return Object.entries(Measure.delegates).map(([key, builder]) => ({
+    const items = Object.entries(Measure.delegates).map(([key, { label, menuItem }]) => ({
+      ...menuItem,
       name: "container_measure",
-      title: builder.label,
+      title: label,
       attrs: {
         child: key,
-      },
-      ...builder,
+      }
     }));
+    console.debug(items);
+    return items;
   }
 
   get name() {
@@ -80,7 +84,7 @@ export default class Measure extends Node {
         let component;
         Object.entries(Measure.delegates).forEach(([key, { builder }]) => {
           if (node.attrs.child == key) {
-            component = builder(node, this.options);
+            component = builder(node, this.options as any);
           }
         });
 
