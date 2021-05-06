@@ -101,9 +101,7 @@ export default class Notice extends Node {
   };
 
   inputRules({ type }: { type: NodeType }) {
-    return this.styleOptions.map((k) =>
-      wrappingInputRule(new RegExp(`^:::\{(notice)\}\{${k}\}$`), type)
-    );
+    return [wrappingInputRule(/^:::\{(notice)\}$/, type)];
   }
 
   toMarkdown(state, node) {
