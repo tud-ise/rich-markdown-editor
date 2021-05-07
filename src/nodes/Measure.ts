@@ -146,7 +146,7 @@ export default class Measure extends Node {
   parseMarkdown() {
     return {
       block: "container_measure",
-      getAttrs: (tok) => ({ style: tok.info.match(/^\{measure}{(.*)\}/)[1] }),
+      getAttrs: (tok) => ({ child: tok.info.match(/^\{measure}{(.*)\}/)[1] }),
     };
   }
 }
