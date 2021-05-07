@@ -35,8 +35,8 @@ const registerSingleValueMeasureDelegate = (
   }: Omit<typeof singleValueMeasuresScaffold[number], "validator">,
   validator: (value: any) => boolean
 ) => {
-  Measure.registerDelegate(`single-${className}`, {
-    label: `Single ${label} Value`,
+  Measure.registerDelegate(className, {
+    label: `${label} Value`,
     builder: ({}, { readOnly }) => {
       return <input type={htmlType} disabled={!readOnly}></input>;
     },

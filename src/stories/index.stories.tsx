@@ -142,39 +142,39 @@ Measures.args = {
 
 
 \\
-:::{measure}{single-text}
+:::{measure}{text}
 Free Text *Measure*
 :::
 
-:::{measure}{single-decimal}
+:::{measure}{decimal}
 Decimal Value Measure
 :::
 
-:::{measure}{single-float}
+:::{measure}{float}
 Floating-Point Value Measure
 :::
 
-:::{measure}{single-date}
+:::{measure}{date}
 Date Measure
 :::
 
-:::{measure}{single-percentage}
+:::{measure}{percentage}
 Percentage Measure
 :::
 
-:::{measure}{group-star}
+:::{measure}{star}
 Star Rating
 :::
 
-:::{measure}{group-likert}
+:::{measure}{likert}
 Likert Rating
 :::
 
-:::{measure}{group-dropdown}
+:::{measure}{dropdown}
 Dropdown Selection
 :::
 
-:::{measure}{grid-rubric}
+:::{measure}{rubric}
 Rubrics
 :::
 `,

@@ -14,7 +14,7 @@ const registerGridBasedMeasureDelegate = (
   }: Omit<typeof gridBasedMeasuresScaffold[number], "validator">,
   validator: (value: any) => boolean
 ) => {
-  Measure.registerDelegate(`grid-${className}`, {
+  Measure.registerDelegate(className, {
     label: `${label} Rating`,
     builder: ({}, { readOnly }) => {
       return <div style={{}}></div>;

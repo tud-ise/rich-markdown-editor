@@ -16,7 +16,7 @@ const registerRadioGroupValueMeasureDelegate = (
   }: Omit<typeof radioGroupMeasuresScaffold[number], "validator">,
   validator: (value: any) => boolean
 ) => {
-  Measure.registerDelegate(`group-${className}`, {
+  Measure.registerDelegate(className, {
     label: label,
     builder: ({}, { readOnly }) => {
       return <div style={{}}></div>;

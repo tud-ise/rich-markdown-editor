@@ -933,13 +933,13 @@ const StyledEditor = styled("div")<{
     }
   }
 
+  .notice-block {
+    display: flex;
+    align-items: center;
+  }
+
   .notice-block,
   .measure-block {
-    :not(.measure-block) {
-      display: flex;
-      align-items: center;
-    }
-
     background: ${(props) => props.theme.noticeInfoBackground};
     color: ${(props) => props.theme.noticeInfoText};
     border-radius: 4px;
