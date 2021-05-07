@@ -953,29 +953,29 @@ const StyledEditor = styled("div")<{
     a:not(.heading-name) {
       text-decoration: underline;
     }
+
+    .content {
+      flex-grow: 1;
+    }
+
+    .controls {
+      flex-grow: 1;
+    }
+
+    .icon {
+      width: 24px;
+      height: 24px;
+      align-self: flex-start;
+      margin-right: 4px;
+      position: relative;
+      top: 1px;
+    }
   }
 
-  .notice-block,
-  .measure-block .content {
-    flex-grow: 1;
-  }
-
-  .notice-block,
-  .measure-block .controls {
-    padding: 4px 8px;
-  }
-
-  .notice-block,
-  .measure-block .icon {
-    width: 24px;
-    height: 24px;
-    align-self: flex-start;
-    margin-right: 4px;
-    position: relative;
-    top: 1px;
-  }
-
-  .notice-block.tip {
+  .notice-block.tip,
+  .measure-block.star,
+  .measure-block.likert,
+  .measure-block.dropdown {
     background: ${(props) => props.theme.noticeTipBackground};
     color: ${(props) => props.theme.noticeTipText};
 
@@ -984,7 +984,8 @@ const StyledEditor = styled("div")<{
     }
   }
 
-  .notice-block.warning {
+  .notice-block.warning,
+  .measure-block.rubric {
     background: ${(props) => props.theme.noticeWarningBackground};
     color: ${(props) => props.theme.noticeWarningText};
 

@@ -1,18 +1,29 @@
 import { wrappingInputRule } from "prosemirror-inputrules";
-import { Node as ProsemirrorNode } from 'prosemirror-model';
+import { Node as ProsemirrorNode } from "prosemirror-model";
 import toggleWrap from "../commands/toggleWrap";
 import Node from "./Node";
+import { BeakerIcon } from "outline-icons";
+import * as React from "react";
 import ReactDOM from "react-dom";
-import base from '../dictionary';
-import { MenuItem } from '../types';
-import RichMarkdownEditor from '..';
+import base from "../dictionary";
+import { MenuItem } from "../types";
+import RichMarkdownEditor from "..";
 
 export type ChildBuilder = {
   label: string;
   className: string;
-  builder: (props: { node: ProsemirrorNode, editor: RichMarkdownEditor }, options: Partial<typeof base> & {
-    readOnly: boolean;
-  }) => JSX.Element;
+  iconBuilder?: (
+    props: { node: ProsemirrorNode; editor: RichMarkdownEditor },
+    options: Partial<typeof base> & {
+      readOnly: boolean;
+    }
+  ) => JSX.Element;
+  builder: (
+    props: { node: ProsemirrorNode; editor: RichMarkdownEditor },
+    options: Partial<typeof base> & {
+      readOnly: boolean;
+    }
+  ) => JSX.Element;
   menuItem: Omit<MenuItem, "title" | "attrs">;
 };
 
@@ -29,14 +40,16 @@ export default class Measure extends Node {
   }
 
   static get blockMenuItems(): MenuItem[] {
-    return Object.entries(Measure.delegates).map(([key, { label, menuItem }]) => ({
-      ...menuItem,
-      name: "container_measure",
-      title: label,
-      attrs: {
-        child: key,
-      }
-    }));
+    return Object.entries(Measure.delegates).map(
+      ([key, { label, menuItem }]) => ({
+        ...menuItem,
+        name: "container_measure",
+        title: label,
+        attrs: {
+          child: key,
+        },
+      })
+    );
   }
 
   get name() {
@@ -50,7 +63,7 @@ export default class Measure extends Node {
           default: Object.entries(Measure.delegates)[0][0],
         },
         state: {
-          default: {}
+          default: {},
         },
       },
       content: "block+",
@@ -82,21 +95,40 @@ export default class Measure extends Node {
           select.appendChild(option);
         });
 
-
-        let component;
+        let controls;
         Object.entries(Measure.delegates).forEach(([key, { builder }]) => {
           if (node.attrs.child == key) {
-            component = builder({
-              node: node,
-              editor: this.editor,
-            }, this.options as any);
+            controls = builder(
+              {
+                node: node,
+                editor: this.editor,
+              },
+              this.options as any
+            );
           }
         });
 
         const container = document.createElement("div");
-        ReactDOM.render(component, container);
+        ReactDOM.render(controls, container);
 
-        // construct a useState hook for react writing into the 
+        let component = <BeakerIcon color="currentColor" />;
+        Object.entries(Measure.delegates).forEach(([key, { iconBuilder }]) => {
+          if (node.attrs.child == key && iconBuilder) {
+            component = iconBuilder(
+              {
+                node: node,
+                editor: this.editor,
+              },
+              this.options as any
+            );
+          }
+        });
+
+        const icon = document.createElement("div");
+        icon.className = "icon";
+        ReactDOM.render(component, icon);
+
+        // construct a useState hook for react writing into the
         // ```json field?
         // this.editor.view.state.tr.setNodeMarkup(node, undefined, {})
 
@@ -104,7 +136,12 @@ export default class Measure extends Node {
           "div",
           { class: `measure-block ${node.attrs.child}` },
           ["div", { contentEditable: false }, select],
-          ["div", { class: "content" }, 0],
+          [
+            "div",
+            { style: "display:flex;flex-direction:row;" },
+            icon,
+            ["div", { class: "content" }, 0],
+          ],
           ["div", { class: "controls", contentEditable: false }, container],
         ];
       },
@@ -135,7 +172,11 @@ export default class Measure extends Node {
   }
 
   toMarkdown(state, node) {
-    state.write("\n:::{measure}{" + (node.attrs.child || Object.entries(Measure.delegates)[0][0]) + "}\n");
+    state.write(
+      "\n:::{measure}{" +
+        (node.attrs.child || Object.entries(Measure.delegates)[0][0]) +
+        "}\n"
+    );
     // state.write("```json\n" + `${JSON.stringify(node.attrs.state, null, 2)}\n` + "```\n")
     state.renderContent(node);
     state.ensureNewLine();

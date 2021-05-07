@@ -143,7 +143,7 @@ Measures.args = {
 
 \\
 :::{measure}{text}
-Free Text *Measure*
+Free Text Field
 :::
 
 :::{measure}{decimal}
@@ -185,7 +185,50 @@ ReadOnly.args = {
   readOnly: true,
   defaultValue: `# Read Only
   
-The content of this editor cannot be edited`,
+The content of this editor cannot be edited
+
+\\
+:::{notice}{info}
+Measurements are activated in read-only mode
+:::
+
+\\
+:::{measure}{text}
+Free Text Field
+:::
+
+:::{measure}{decimal}
+Decimal Value Measure
+:::
+
+:::{measure}{float}
+Floating-Point Value Measure
+:::
+
+:::{measure}{date}
+Date Measure
+:::
+
+:::{measure}{percentage}
+Percentage Measure
+:::
+
+:::{measure}{star}
+Star Rating
+:::
+
+:::{measure}{likert}
+Likert Rating
+:::
+
+:::{measure}{dropdown}
+Dropdown Selection
+:::
+
+:::{measure}{rubric}
+Rubrics
+:::
+`,
 };
 
 export const MaxLength = Template.bind({});
