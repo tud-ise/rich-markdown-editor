@@ -26,16 +26,14 @@ const singleValueMeasuresScaffold = [
   },
 ] as const;
 
-const registerSingleValueMeasureDelegate = (
-  {
-    className,
-    label,
-    htmlType,
-  }: Omit<typeof singleValueMeasuresScaffold[number], "validator">,
-  validator: (value: any) => boolean
-) => {
+const registerSingleValueMeasureDelegate = ({
+  className,
+  label,
+  htmlType,
+}: Omit<typeof singleValueMeasuresScaffold[number], "validator">) => {
   Measure.registerDelegate(className, {
     label: `${label} Value`,
+    // eslint-disable-next-line react/display-name
     builder: (state, { set, attrs }, { readOnly }) => {
       return (
         <div>
@@ -55,6 +53,6 @@ const registerSingleValueMeasureDelegate = (
   });
 };
 
-singleValueMeasuresScaffold.forEach(({ validator, ...props }) =>
-  registerSingleValueMeasureDelegate(props, validator)
+singleValueMeasuresScaffold.forEach(({ /*validator,*/ ...props }) =>
+  registerSingleValueMeasureDelegate(props /*, validator*/)
 );

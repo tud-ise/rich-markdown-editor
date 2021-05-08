@@ -6,16 +6,14 @@ const gridBasedMeasuresScaffold = [
   { label: "Rubric", className: "rubric", validator: () => true },
 ];
 
-const registerGridBasedMeasureDelegate = (
-  {
-    className,
-    label,
-  }: Omit<typeof gridBasedMeasuresScaffold[number], "validator">,
-  validator: (value: any) => boolean
-) => {
+const registerGridBasedMeasureDelegate = ({
+  className,
+  label,
+}: Omit<typeof gridBasedMeasuresScaffold[number], "validator">) => {
   Measure.registerDelegate(className, {
     label: `${label} Rating`,
-    builder: (state, { set, attrs }, { readOnly }) => {
+    // eslint-disable-next-line react/display-name
+    builder: (state, { set, attrs }) => {
       return (
         <div>
           <code>{JSON.stringify(attrs)}</code>
@@ -32,6 +30,6 @@ const registerGridBasedMeasureDelegate = (
   });
 };
 
-gridBasedMeasuresScaffold.forEach(({ validator, ...props }) =>
-  registerGridBasedMeasureDelegate(props, validator)
+gridBasedMeasuresScaffold.forEach(({ /*validator,*/ ...props }) =>
+  registerGridBasedMeasureDelegate(props /*, validator*/)
 );

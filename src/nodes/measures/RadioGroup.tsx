@@ -8,16 +8,14 @@ const radioGroupMeasuresScaffold = [
   { label: "Dropdown Selection", className: "dropdown", validator: () => true },
 ];
 
-const registerRadioGroupValueMeasureDelegate = (
-  {
-    className,
-    label,
-  }: Omit<typeof radioGroupMeasuresScaffold[number], "validator">,
-  validator: (value: any) => boolean
-) => {
+const registerRadioGroupValueMeasureDelegate = ({
+  className,
+  label,
+}: Omit<typeof radioGroupMeasuresScaffold[number], "validator">) => {
   Measure.registerDelegate(className, {
     label: label,
-    builder: (state, { set, attrs }, { readOnly }) => {
+    // eslint-disable-next-line react/display-name
+    builder: (state, { set, attrs }) => {
       return (
         <div>
           <code>{JSON.stringify(attrs)}</code>
@@ -34,6 +32,6 @@ const registerRadioGroupValueMeasureDelegate = (
   });
 };
 
-radioGroupMeasuresScaffold.forEach(({ validator, ...props }) =>
-  registerRadioGroupValueMeasureDelegate(props, validator)
+radioGroupMeasuresScaffold.forEach(({ /*validator,*/ ...props }) =>
+  registerRadioGroupValueMeasureDelegate(props /*, validator*/)
 );
