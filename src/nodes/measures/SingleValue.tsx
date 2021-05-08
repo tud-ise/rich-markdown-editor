@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Node } from "prosemirror-model";
 import Measure from "../Measure";
 import { BeakerIcon } from "outline-icons";
 

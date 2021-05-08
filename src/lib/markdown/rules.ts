@@ -23,5 +23,4 @@ export default function rules({ embeds }) {
     .use(tablesPlugin)
     .use(noticesPlugin)
     .use(measuresPlugin);
-
 }

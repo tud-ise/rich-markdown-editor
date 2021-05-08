@@ -12,7 +12,7 @@ export type DeferredReactRenderer = (
   state: ProsemirrorNode["attrs"]["state"],
   props: {
     attrs: ProsemirrorNode["attrs"];
-    set: <T extends object>(s: T | ((T) => T)) => void;
+    set: <T>(s: T | ((T) => T)) => void;
   },
   options: Partial<typeof base> & {
     readOnly: boolean;
@@ -52,11 +52,11 @@ export default class Measure extends Node {
     );
   }
 
-  get name() {
+  get name(): string {
     return "container_measure";
   }
 
-  get schema() {
+  get schema(): any {
     return {
       attrs: {
         child: {
@@ -77,7 +77,7 @@ export default class Measure extends Node {
           contentElement: "div:last-child",
           getAttrs: (dom: HTMLDivElement) => ({
             child: Object.keys(Measure.delegates).reduce(
-              (v, k) => (v != null ? v : dom.className.includes(k) ? k : v),
+              (v, k) => (v !== null ? v : dom.className.includes(k) ? k : v),
               undefined
             ),
           }),
@@ -99,14 +99,17 @@ export default class Measure extends Node {
         });
 
         let controls;
-        let controlsContainer = document.createElement("div");
+        const controlsContainer = document.createElement("div");
         Object.entries(Measure.delegates).forEach(([key, { builder }]) => {
-          if (node.attrs.child == key) {
+          if (node.attrs.child === key) {
             controls = builder(
               node.attrs.state || {},
               {
                 attrs: node.attrs,
-                set: this.buildHandleSetState(controlsContainer, node.attrs),
+                set: this.buildHandleSetState(
+                  controlsContainer,
+                  node.attrs
+                ) as any,
               },
               this.options as any
             );
@@ -115,14 +118,14 @@ export default class Measure extends Node {
         ReactDOM.render(controls, controlsContainer);
 
         let icon = <BeakerIcon color="currentColor" />;
-        let iconContainer = document.createElement("div");
+        const iconContainer = document.createElement("div");
         Object.entries(Measure.delegates).forEach(([key, { iconBuilder }]) => {
-          if (node.attrs.child == key && iconBuilder) {
+          if (node.attrs.child === key && iconBuilder) {
             icon = iconBuilder(
               node.attrs.state || {},
               {
                 attrs: node.attrs,
-                set: this.buildHandleSetState(iconContainer, node.attrs),
+                set: this.buildHandleSetState(iconContainer, node.attrs) as any,
               },
               this.options as any
             );
@@ -153,10 +156,10 @@ export default class Measure extends Node {
   }
 
   commands({ type }) {
-    return (attrs) => toggleWrap(type, attrs);
+    return attrs => toggleWrap(type, attrs);
   }
 
-  buildHandleChildChange = (attrs = {}) => (event) => {
+  buildHandleChildChange = (attrs = {}) => event => {
     const { view } = this.editor;
     const { tr } = view.state;
     const element = event.target;
@@ -172,10 +175,9 @@ export default class Measure extends Node {
     }
   };
 
-  buildHandleSetState = (
-    target: HTMLElement,
-    attrs: { state?: object } = {}
-  ) => (state: object | ((s: object) => object)) => {
+  buildHandleSetState = (target: HTMLElement, attrs: { state?: any } = {}) => (
+    state: any | ((s: any) => any)
+  ) => {
     const { view } = this.editor;
     const { tr } = view.state;
     const { top, left } = target.getBoundingClientRect();
@@ -187,7 +189,7 @@ export default class Measure extends Node {
 
     const update = {
       ...attrs,
-      state: typeof state == "function" ? state(attrs.state || {}) : state,
+      state: typeof state === "function" ? state(attrs.state || {}) : state,
     };
 
     const transaction = tr.setNodeMarkup(result.inside, undefined, update);
@@ -214,7 +216,7 @@ export default class Measure extends Node {
   parseMarkdown() {
     return {
       block: "container_measure",
-      getAttrs: (tok) => ({ child: tok.info.match(/^\{measure}{(.*)\}/)[1] }),
+      getAttrs: tok => ({ child: tok.info.match(/^\{measure}{(.*)\}/)[1] }),
     };
   }
 }

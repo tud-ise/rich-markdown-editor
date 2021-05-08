@@ -18,7 +18,7 @@ import {
 } from "outline-icons";
 import { MenuItem } from "../types";
 import baseDictionary from "../dictionary";
-import Measure from '../nodes/Measure';
+import Measure from "../nodes/Measure";
 
 const SSR = typeof window === "undefined";
 const isMac = !SSR && window.navigator.platform === "MacIntel";

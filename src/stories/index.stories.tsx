@@ -19,7 +19,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story<Props> = (args) => <Editor {...args} />;
+const Template: Story<Props> = args => <Editor {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
@@ -262,7 +262,7 @@ Persisted.args = {
     `# Persisted
   
 The contents of this editor are persisted to local storage on change (edit and reload)`,
-  onChange: debounce((value) => {
+  onChange: debounce(value => {
     const text = value();
     localStorage.setItem("saved", text);
   }, 250),

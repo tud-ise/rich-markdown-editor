@@ -9,7 +9,9 @@ export default function notice(md): void {
 
       if (tokens[idx].nesting === 1) {
         // opening tag
-        return `<div class="notice-block notice-${md.utils.escapeHtml(info)}">\n`;
+        return `<div class="notice-block notice-${md.utils.escapeHtml(
+          info
+        )}">\n`;
       } else {
         // closing tag
         return "</div>\n";
