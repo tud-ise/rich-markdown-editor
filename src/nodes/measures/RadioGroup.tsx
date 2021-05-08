@@ -18,8 +18,15 @@ const registerRadioGroupValueMeasureDelegate = (
 ) => {
   Measure.registerDelegate(className, {
     label: label,
-    builder: ({}, { readOnly }) => {
-      return <div style={{}}></div>;
+    builder: (state, { set, attrs }, { readOnly }) => {
+      return (
+        <div>
+          <code>{JSON.stringify(attrs)}</code>
+          <button onClick={() => set({ enabled: !state.enabled })}>
+            Toggle
+          </button>
+        </div>
+      );
     },
     menuItem: {
       icon: BulletedListIcon,

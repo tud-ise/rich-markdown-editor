@@ -37,8 +37,17 @@ const registerSingleValueMeasureDelegate = (
 ) => {
   Measure.registerDelegate(className, {
     label: `${label} Value`,
-    builder: ({}, { readOnly }) => {
-      return <input type={htmlType} disabled={!readOnly}></input>;
+    builder: (state, { set, attrs }, { readOnly }) => {
+      return (
+        <div>
+          <code>{JSON.stringify(attrs)}</code>
+          <input type={htmlType} disabled={!state.enabled || !readOnly}></input>
+
+          <button onClick={() => set({ enabled: !state.enabled })}>
+            Toggle
+          </button>
+        </div>
+      );
     },
     menuItem: {
       icon: BeakerIcon,

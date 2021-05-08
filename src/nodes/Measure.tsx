@@ -7,23 +7,23 @@ import * as React from "react";
 import ReactDOM from "react-dom";
 import base from "../dictionary";
 import { MenuItem } from "../types";
-import RichMarkdownEditor from "..";
+
+export type DeferredReactRenderer = (
+  state: ProsemirrorNode["attrs"]["state"],
+  props: {
+    attrs: ProsemirrorNode["attrs"];
+    set: <T extends object>(s: T | ((T) => T)) => void;
+  },
+  options: Partial<typeof base> & {
+    readOnly: boolean;
+  }
+) => JSX.Element;
 
 export type ChildBuilder = {
   label: string;
   className: string;
-  iconBuilder?: (
-    props: { node: ProsemirrorNode; editor: RichMarkdownEditor },
-    options: Partial<typeof base> & {
-      readOnly: boolean;
-    }
-  ) => JSX.Element;
-  builder: (
-    props: { node: ProsemirrorNode; editor: RichMarkdownEditor },
-    options: Partial<typeof base> & {
-      readOnly: boolean;
-    }
-  ) => JSX.Element;
+  iconBuilder?: DeferredReactRenderer;
+  builder: DeferredReactRenderer;
   menuItem: Omit<MenuItem, "title" | "attrs">;
 };
 
@@ -83,9 +83,12 @@ export default class Measure extends Node {
           }),
         },
       ],
-      toDOM: (node) => {
+      toDOM: (node: ProsemirrorNode) => {
         const select = document.createElement("select");
-        select.addEventListener("change", this.handleChildChange);
+        select.addEventListener(
+          "change",
+          this.buildHandleChildChange(node.attrs)
+        );
 
         Object.entries(Measure.delegates).forEach(([key, { label }]) => {
           const option = document.createElement("option");
@@ -96,41 +99,38 @@ export default class Measure extends Node {
         });
 
         let controls;
+        let controlsContainer = document.createElement("div");
         Object.entries(Measure.delegates).forEach(([key, { builder }]) => {
           if (node.attrs.child == key) {
             controls = builder(
+              node.attrs.state || {},
               {
-                node: node,
-                editor: this.editor,
+                attrs: node.attrs,
+                set: this.buildHandleSetState(controlsContainer, node.attrs),
               },
               this.options as any
             );
           }
         });
+        ReactDOM.render(controls, controlsContainer);
 
-        const container = document.createElement("div");
-        ReactDOM.render(controls, container);
-
-        let component = <BeakerIcon color="currentColor" />;
+        let icon = <BeakerIcon color="currentColor" />;
+        let iconContainer = document.createElement("div");
         Object.entries(Measure.delegates).forEach(([key, { iconBuilder }]) => {
           if (node.attrs.child == key && iconBuilder) {
-            component = iconBuilder(
+            icon = iconBuilder(
+              node.attrs.state || {},
               {
-                node: node,
-                editor: this.editor,
+                attrs: node.attrs,
+                set: this.buildHandleSetState(iconContainer, node.attrs),
               },
               this.options as any
             );
           }
         });
 
-        const icon = document.createElement("div");
-        icon.className = "icon";
-        ReactDOM.render(component, icon);
-
-        // construct a useState hook for react writing into the
-        // ```json field?
-        // this.editor.view.state.tr.setNodeMarkup(node, undefined, {})
+        iconContainer.className = "icon";
+        ReactDOM.render(icon, iconContainer);
 
         return [
           "div",
@@ -139,10 +139,14 @@ export default class Measure extends Node {
           [
             "div",
             { style: "display:flex;flex-direction:row;" },
-            icon,
+            iconContainer,
             ["div", { class: "content" }, 0],
           ],
-          ["div", { class: "controls", contentEditable: false }, container],
+          [
+            "div",
+            { class: "controls", contentEditable: false },
+            controlsContainer,
+          ],
         ];
       },
     };
@@ -152,7 +156,7 @@ export default class Measure extends Node {
     return (attrs) => toggleWrap(type, attrs);
   }
 
-  handleChildChange = (event) => {
+  buildHandleChildChange = (attrs = {}) => (event) => {
     const { view } = this.editor;
     const { tr } = view.state;
     const element = event.target;
@@ -161,10 +165,33 @@ export default class Measure extends Node {
 
     if (result) {
       const transaction = tr.setNodeMarkup(result.inside, undefined, {
+        ...attrs,
         child: element.value,
       });
       view.dispatch(transaction);
     }
+  };
+
+  buildHandleSetState = (
+    target: HTMLElement,
+    attrs: { state?: object } = {}
+  ) => (state: object | ((s: object) => object)) => {
+    const { view } = this.editor;
+    const { tr } = view.state;
+    const { top, left } = target.getBoundingClientRect();
+    const result = view.posAtCoords({ top, left });
+
+    if (!result) {
+      return;
+    }
+
+    const update = {
+      ...attrs,
+      state: typeof state == "function" ? state(attrs.state || {}) : state,
+    };
+
+    const transaction = tr.setNodeMarkup(result.inside, undefined, update);
+    view.dispatch(transaction);
   };
 
   inputRules({ type }) {

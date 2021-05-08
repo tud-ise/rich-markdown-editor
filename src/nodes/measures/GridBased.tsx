@@ -16,8 +16,15 @@ const registerGridBasedMeasureDelegate = (
 ) => {
   Measure.registerDelegate(className, {
     label: `${label} Rating`,
-    builder: ({}, { readOnly }) => {
-      return <div style={{}}></div>;
+    builder: (state, { set, attrs }, { readOnly }) => {
+      return (
+        <div>
+          <code>{JSON.stringify(attrs)}</code>
+          <button onClick={() => set({ enabled: !state.enabled })}>
+            Toggle
+          </button>
+        </div>
+      );
     },
     menuItem: {
       icon: TodoListIcon,

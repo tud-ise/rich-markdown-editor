@@ -1180,8 +1180,7 @@ const StyledEditor = styled("div")<{
   }
 
   .code-block,
-  .notice-block,
-  .measure-block {
+  .notice-block {
     position: relative;
 
     select,
@@ -1210,6 +1209,43 @@ const StyledEditor = styled("div")<{
 
       button {
         display: ${(props) => (props.readOnly ? "inline" : "none")};
+      }
+    }
+
+    select:focus,
+    select:active {
+      display: inline;
+    }
+  }
+
+  .measure-block {
+    position: relative;
+
+    select {
+      background: ${(props) => props.theme.blockToolbarBackground};
+      color: ${(props) => props.theme.blockToolbarItem};
+      border-width: 1px;
+      font-size: 13px;
+      display: none;
+      position: absolute;
+      border-radius: 4px;
+      padding: 2px;
+      z-index: 1;
+      top: 4px;
+      right: 4px;
+    }
+
+    button {
+      padding: 2px 4px;
+    }
+
+    &:hover {
+      select {
+        display: ${(props) => (props.readOnly ? "none" : "inline")};
+      }
+
+      button {
+        display: ${(props) => (props.readOnly ? "none" : "inline")};
       }
     }
 
