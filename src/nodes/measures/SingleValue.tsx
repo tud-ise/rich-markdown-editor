@@ -49,7 +49,6 @@ const registerSingleValueMeasureDelegate = ({
     label: `${label} Value`,
     // eslint-disable-next-line react/display-name
     builder: (state: SingleValueState, { set, attrs }) => {
-      console.log(state.enabled);
       return (
         <div>
           <code>{JSON.stringify(attrs)}</code>
