@@ -8,6 +8,10 @@ const radioGroupMeasuresScaffold = [
   { label: "Dropdown Selection", className: "dropdown", validator: () => true },
 ];
 
+type RadioGroupState = {
+  enabled: boolean;
+};
+
 const registerRadioGroupValueMeasureDelegate = ({
   className,
   label,
@@ -15,7 +19,7 @@ const registerRadioGroupValueMeasureDelegate = ({
   Measure.registerDelegate(className, {
     label: label,
     // eslint-disable-next-line react/display-name
-    builder: (state, { set, attrs }) => {
+    builder: (state: RadioGroupState, { set, attrs }) => {
       return (
         <div>
           <code>{JSON.stringify(attrs)}</code>

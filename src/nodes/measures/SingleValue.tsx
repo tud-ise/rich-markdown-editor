@@ -4,7 +4,12 @@ import { BeakerIcon } from "outline-icons";
 
 // define all single value measures with their respective validator
 const singleValueMeasuresScaffold = [
-  { label: "Text", className: "text", htmlType: "text", validator: () => true },
+  {
+    label: "Text",
+    className: "text",
+    htmlType: "text",
+    validator: () => true,
+  },
   {
     label: "Decimal",
     className: "decimal",
@@ -17,7 +22,12 @@ const singleValueMeasuresScaffold = [
     htmlType: "number",
     validator: () => true,
   },
-  { label: "Date", className: "date", htmlType: "date", validator: () => true },
+  {
+    label: "Date",
+    className: "date",
+    htmlType: "date",
+    validator: () => true,
+  },
   {
     label: "Percentage",
     className: "percentage",
@@ -25,6 +35,10 @@ const singleValueMeasuresScaffold = [
     validator: () => true,
   },
 ] as const;
+
+type SingleValueState = {
+  enabled: boolean;
+};
 
 const registerSingleValueMeasureDelegate = ({
   className,
@@ -34,11 +48,12 @@ const registerSingleValueMeasureDelegate = ({
   Measure.registerDelegate(className, {
     label: `${label} Value`,
     // eslint-disable-next-line react/display-name
-    builder: (state, { set, attrs }, { readOnly }) => {
+    builder: (state: SingleValueState, { set, attrs }) => {
+      console.log(state.enabled);
       return (
         <div>
           <code>{JSON.stringify(attrs)}</code>
-          <input type={htmlType} disabled={!state.enabled || !readOnly}></input>
+          <input type={htmlType} disabled={!state.enabled}></input>
 
           <button onClick={() => set({ enabled: !state.enabled })}>
             Toggle

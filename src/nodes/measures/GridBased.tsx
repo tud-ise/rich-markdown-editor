@@ -6,6 +6,10 @@ const gridBasedMeasuresScaffold = [
   { label: "Rubric", className: "rubric", validator: () => true },
 ];
 
+type GridBasedState = {
+  enabled: boolean;
+};
+
 const registerGridBasedMeasureDelegate = ({
   className,
   label,
@@ -13,7 +17,7 @@ const registerGridBasedMeasureDelegate = ({
   Measure.registerDelegate(className, {
     label: `${label} Rating`,
     // eslint-disable-next-line react/display-name
-    builder: (state, { set, attrs }) => {
+    builder: (state: GridBasedState, { set, attrs }) => {
       return (
         <div>
           <code>{JSON.stringify(attrs)}</code>

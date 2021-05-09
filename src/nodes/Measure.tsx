@@ -5,34 +5,32 @@ import Node from "./Node";
 import { BeakerIcon } from "outline-icons";
 import * as React from "react";
 import ReactDOM from "react-dom";
-import base from "../dictionary";
-import { MenuItem } from "../types";
+import { MenuItem, DeferredReactRenderer } from "../types";
 
-export type DeferredReactRenderer = (
-  state: ProsemirrorNode["attrs"]["state"],
-  props: {
-    attrs: ProsemirrorNode["attrs"];
-    set: <T>(s: T | ((T) => T)) => void;
-  },
-  options: Partial<typeof base> & {
-    readOnly: boolean;
-  }
-) => JSX.Element;
+export type MeasureOptions = {
+  readOnly: boolean;
+};
 
-export type ChildBuilder = {
+export type MeasureBuilder<
+  O extends Record<string, unknown>,
+  T extends ProsemirrorNode["attrs"]["state"]
+> = {
   label: string;
   className: string;
-  iconBuilder?: DeferredReactRenderer;
-  builder: DeferredReactRenderer;
+  iconBuilder?: DeferredReactRenderer<O, T>;
+  builder: DeferredReactRenderer<O, T>;
   menuItem: Omit<MenuItem, "title" | "attrs">;
 };
 
 export default class Measure extends Node {
-  private static readonly delegates: Record<string, ChildBuilder> = {};
-  static registerDelegate(
+  private static readonly delegates: Record<
+    string,
+    MeasureBuilder<MeasureOptions, ProsemirrorNode["attrs"]["state"]>
+  > = {};
+  static registerDelegate<T extends ProsemirrorNode["attrs"]["state"]>(
     className: string,
-    node: Omit<ChildBuilder, "className">
-  ) {
+    node: Omit<MeasureBuilder<MeasureOptions, T>, "className">
+  ): void {
     Measure.delegates[className] = {
       className: className,
       ...node,
