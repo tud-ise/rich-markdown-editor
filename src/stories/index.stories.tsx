@@ -138,23 +138,23 @@ Warning
 
 export const Measures = Template.bind({});
 Measures.args = {
+  onChange: value => console.debug(value()),
   defaultValue: `# Measures
 
-
 \\
-:::{measure}{text}
+:::{measure}{text}{"enabled":true}
 Free Text Field
 :::
 
-:::{measure}{decimal}
+:::{measure}{decimal}{"enabled":true}
 Decimal Value Measure
 :::
 
-:::{measure}{float}
+:::{measure}{float}{"enabled":true}
 Floating-Point Value Measure
 :::
 
-:::{measure}{date}
+:::{measure}{date}{"enabled":true}
 Date Measure
 :::
 

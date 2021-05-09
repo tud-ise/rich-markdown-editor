@@ -204,9 +204,10 @@ export default class Measure extends Node {
     state.write(
       "\n:::{measure}{" +
         (node.attrs.child || Object.entries(Measure.delegates)[0][0]) +
-        "}\n"
+        "}" +
+        JSON.stringify(node.attrs.state || {}) +
+        "\n"
     );
-    // state.write("```json\n" + `${JSON.stringify(node.attrs.state, null, 2)}\n` + "```\n")
     state.renderContent(node);
     state.ensureNewLine();
     state.write(":::");
@@ -216,7 +217,13 @@ export default class Measure extends Node {
   parseMarkdown() {
     return {
       block: "container_measure",
-      getAttrs: tok => ({ child: tok.info.match(/^\{measure}{(.*)\}/)[1] }),
+      getAttrs: tok => {
+        const matches = tok.info.match(/^{measure}{(\w+)}(?:{(.*)})?$/);
+        return {
+          child: matches[1],
+          state: JSON.parse(`{${matches[2] || ""}}`),
+        };
+      },
     };
   }
 }

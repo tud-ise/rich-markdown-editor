@@ -3,7 +3,8 @@ import customFence from "markdown-it-container";
 export default function measure(md): void {
   return customFence(md, "measure", {
     marker: ":",
-    validate: (params: string) => params.trim().match(/^\{measure}{(.*)\}$/),
+    validate: (params: string) =>
+      params.trim().match(/^{measure}{(\w+)}(?:{(.*)})?$/gm),
     render: function(tokens, idx) {
       const { info } = tokens[idx];
 
