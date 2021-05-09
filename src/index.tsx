@@ -26,6 +26,11 @@ import ExtensionManager from "./lib/ExtensionManager";
 import ComponentView from "./lib/ComponentView";
 import headingToSlug from "./lib/headingToSlug";
 
+// measures
+import "./nodes/measures/SingleValue";
+import "./nodes/measures/RadioGroup";
+import "./nodes/measures/GridBased";
+
 // nodes
 import ReactNode from "./nodes/ReactNode";
 import Doc from "./nodes/Doc";
@@ -49,6 +54,7 @@ import Table from "./nodes/Table";
 import TableCell from "./nodes/TableCell";
 import TableHeadCell from "./nodes/TableHeadCell";
 import TableRow from "./nodes/TableRow";
+import Measure from "./nodes/Measure";
 
 // marks
 import Bold from "./marks/Bold";
@@ -278,6 +284,10 @@ class RichMarkdownEditor extends React.PureComponent<Props, State> {
         new ListItem(),
         new Notice({
           dictionary,
+        }),
+        new Measure({
+          dictionary,
+          readOnly: this.props.readOnly,
         }),
         new Heading({
           dictionary,
@@ -928,6 +938,10 @@ const StyledEditor = styled("div")<{
   .notice-block {
     display: flex;
     align-items: center;
+  }
+
+  .notice-block,
+  .measure-block {
     background: ${props => props.theme.noticeInfoBackground};
     color: ${props => props.theme.noticeInfoText};
     border-radius: 4px;
@@ -941,22 +955,29 @@ const StyledEditor = styled("div")<{
     a:not(.heading-name) {
       text-decoration: underline;
     }
+
+    .content {
+      flex-grow: 1;
+    }
+
+    .controls {
+      flex-grow: 1;
+    }
+
+    .icon {
+      width: 24px;
+      height: 24px;
+      align-self: flex-start;
+      margin-right: 4px;
+      position: relative;
+      top: 1px;
+    }
   }
 
-  .notice-block .content {
-    flex-grow: 1;
-  }
-
-  .notice-block .icon {
-    width: 24px;
-    height: 24px;
-    align-self: flex-start;
-    margin-right: 4px;
-    position: relative;
-    top: 1px;
-  }
-
-  .notice-block.tip {
+  .notice-block.tip,
+  .measure-block.star,
+  .measure-block.likert,
+  .measure-block.dropdown {
     background: ${props => props.theme.noticeTipBackground};
     color: ${props => props.theme.noticeTipText};
 
@@ -965,7 +986,8 @@ const StyledEditor = styled("div")<{
     }
   }
 
-  .notice-block.warning {
+  .notice-block.warning,
+  .measure-block.rubric {
     background: ${props => props.theme.noticeWarningBackground};
     color: ${props => props.theme.noticeWarningText};
 
@@ -1189,6 +1211,43 @@ const StyledEditor = styled("div")<{
 
       button {
         display: ${props => (props.readOnly ? "inline" : "none")};
+      }
+    }
+
+    select:focus,
+    select:active {
+      display: inline;
+    }
+  }
+
+  .measure-block {
+    position: relative;
+
+    select {
+      background: ${props => props.theme.blockToolbarBackground};
+      color: ${props => props.theme.blockToolbarItem};
+      border-width: 1px;
+      font-size: 13px;
+      display: none;
+      position: absolute;
+      border-radius: 4px;
+      padding: 2px;
+      z-index: 1;
+      top: 4px;
+      right: 4px;
+    }
+
+    button {
+      padding: 2px 4px;
+    }
+
+    &:hover {
+      select {
+        display: ${props => (props.readOnly ? "none" : "inline")};
+      }
+
+      button {
+        display: ${props => (props.readOnly ? "none" : "inline")};
       }
     }
 

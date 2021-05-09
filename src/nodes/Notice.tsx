@@ -4,6 +4,7 @@ import { WarningIcon, InfoIcon, StarredIcon } from "outline-icons";
 import * as React from "react";
 import ReactDOM from "react-dom";
 import Node from "./Node";
+import { NodeType } from "prosemirror-model";
 
 export default class Notice extends Node {
   get styleOptions() {
@@ -99,12 +100,12 @@ export default class Notice extends Node {
     }
   };
 
-  inputRules({ type }) {
-    return [wrappingInputRule(/^:::$/, type)];
+  inputRules({ type }: { type: NodeType }) {
+    return [wrappingInputRule(/^:::\{(notice)\}$/, type)];
   }
 
   toMarkdown(state, node) {
-    state.write("\n:::" + (node.attrs.style || "info") + "\n");
+    state.write("\n:::{notice}{" + (node.attrs.style || "info") + "}\n");
     state.renderContent(node);
     state.ensureNewLine();
     state.write(":::");
@@ -114,7 +115,7 @@ export default class Notice extends Node {
   parseMarkdown() {
     return {
       block: "container_notice",
-      getAttrs: tok => ({ style: tok.info }),
+      getAttrs: tok => ({ style: tok.info.match(/^\{notice}{(.*)\}/)[1] }),
     };
   }
 }

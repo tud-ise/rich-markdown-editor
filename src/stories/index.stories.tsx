@@ -121,16 +121,61 @@ Notices.args = {
 There are three types of editable notice blocks that can be used to callout information:
 
 \\
-:::info
+:::{notice}{info}
 Informational
 :::
 
-:::tip
+:::{notice}{tip}
 Tip
 :::
 
-:::warning
+
+:::{notice}{warning}
 Warning
+:::
+`,
+};
+
+export const Measures = Template.bind({});
+Measures.args = {
+  onChange: value => console.debug(value()),
+  defaultValue: `# Measures
+
+\\
+:::{measure}{text}{"enabled":true}
+Free Text Field
+:::
+
+:::{measure}{decimal}{"enabled":true}
+Decimal Value Measure
+:::
+
+:::{measure}{float}{"enabled":true}
+Floating-Point Value Measure
+:::
+
+:::{measure}{date}{"enabled":true}
+Date Measure
+:::
+
+:::{measure}{percentage}
+Percentage Measure
+:::
+
+:::{measure}{star}
+Star Rating
+:::
+
+:::{measure}{likert}
+Likert Rating
+:::
+
+:::{measure}{dropdown}
+Dropdown Selection
+:::
+
+:::{measure}{rubric}
+Rubrics
 :::
 `,
 };
@@ -140,7 +185,50 @@ ReadOnly.args = {
   readOnly: true,
   defaultValue: `# Read Only
   
-The content of this editor cannot be edited`,
+The content of this editor cannot be edited
+
+\\
+:::{notice}{info}
+Measurements are activated in read-only mode
+:::
+
+\\
+:::{measure}{text}
+Free Text Field
+:::
+
+:::{measure}{decimal}
+Decimal Value Measure
+:::
+
+:::{measure}{float}
+Floating-Point Value Measure
+:::
+
+:::{measure}{date}
+Date Measure
+:::
+
+:::{measure}{percentage}
+Percentage Measure
+:::
+
+:::{measure}{star}
+Star Rating
+:::
+
+:::{measure}{likert}
+Likert Rating
+:::
+
+:::{measure}{dropdown}
+Dropdown Selection
+:::
+
+:::{measure}{rubric}
+Rubrics
+:::
+`,
 };
 
 export const MaxLength = Template.bind({});
