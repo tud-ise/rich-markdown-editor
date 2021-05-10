@@ -138,8 +138,17 @@ Warning
 
 export const Measures = Template.bind({});
 Measures.args = {
+  template: true,
+  readOnly: false,
+  dark: false,
   onChange: value => console.debug(value()),
   defaultValue: `# Measures
+
+\\
+:::{notice}{info}
+Measures react to \`readOnly\` and \`template\` props.
+:::
+
 
 \\
 :::{measure}{text}{"enabled":true}
@@ -187,47 +196,6 @@ ReadOnly.args = {
   
 The content of this editor cannot be edited
 
-\\
-:::{notice}{info}
-Measurements are activated in read-only mode
-:::
-
-\\
-:::{measure}{text}
-Free Text Field
-:::
-
-:::{measure}{decimal}
-Decimal Value Measure
-:::
-
-:::{measure}{float}
-Floating-Point Value Measure
-:::
-
-:::{measure}{date}
-Date Measure
-:::
-
-:::{measure}{percentage}
-Percentage Measure
-:::
-
-:::{measure}{star}
-Star Rating
-:::
-
-:::{measure}{likert}
-Likert Rating
-:::
-
-:::{measure}{dropdown}
-Dropdown Selection
-:::
-
-:::{measure}{rubric}
-Rubrics
-:::
 `,
 };
 
