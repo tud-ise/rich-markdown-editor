@@ -44,7 +44,7 @@ export default class Measure extends Node {
         name: "container_measure",
         title: label,
         attrs: {
-          child: key,
+          component: key,
         },
       })
     );
@@ -57,7 +57,7 @@ export default class Measure extends Node {
   get schema(): any {
     return {
       attrs: {
-        child: {
+        component: {
           default: Object.entries(Measure.delegates)[0][0],
         },
         state: {
@@ -74,7 +74,7 @@ export default class Measure extends Node {
           preserveWhitespace: "full",
           contentElement: "div:last-child",
           getAttrs: (dom: HTMLDivElement) => ({
-            child: Object.keys(Measure.delegates).reduce(
+            component: Object.keys(Measure.delegates).reduce(
               (v, k) => (v !== null ? v : dom.className.includes(k) ? k : v),
               undefined
             ),
@@ -85,21 +85,21 @@ export default class Measure extends Node {
         const select = document.createElement("select");
         select.addEventListener(
           "change",
-          this.buildHandleChildChange(node.attrs)
+          this.buildHandleComponentChange(node.attrs)
         );
 
         Object.entries(Measure.delegates).forEach(([key, { label }]) => {
           const option = document.createElement("option");
           option.value = key;
           option.innerText = label;
-          option.selected = node.attrs.child === key;
+          option.selected = node.attrs.component === key;
           select.appendChild(option);
         });
 
         let controls;
         const controlsContainer = document.createElement("div");
         Object.entries(Measure.delegates).forEach(([key, { builder }]) => {
-          if (node.attrs.child === key) {
+          if (node.attrs.component === key) {
             controls = builder(
               node.attrs.state || {},
               {
@@ -118,7 +118,7 @@ export default class Measure extends Node {
         let icon = <BeakerIcon color="currentColor" />;
         const iconContainer = document.createElement("div");
         Object.entries(Measure.delegates).forEach(([key, { iconBuilder }]) => {
-          if (node.attrs.child === key && iconBuilder) {
+          if (node.attrs.component === key && iconBuilder) {
             icon = iconBuilder(
               node.attrs.state || {},
               {
@@ -135,7 +135,7 @@ export default class Measure extends Node {
 
         return [
           "div",
-          { class: `measure-block ${node.attrs.child}` },
+          { class: `measure-block ${node.attrs.component}` },
           ["div", { contentEditable: false }, select],
           [
             "div",
@@ -157,7 +157,7 @@ export default class Measure extends Node {
     return attrs => toggleWrap(type, attrs);
   }
 
-  buildHandleChildChange = (attrs = {}) => event => {
+  buildHandleComponentChange = (attrs = {}) => event => {
     const { view } = this.editor;
     const { tr } = view.state;
     const element = event.target;
@@ -167,7 +167,7 @@ export default class Measure extends Node {
     if (result) {
       const transaction = tr.setNodeMarkup(result.inside, undefined, {
         ...attrs,
-        child: element.value,
+        component: element.value,
       });
       view.dispatch(transaction);
     }
@@ -201,7 +201,7 @@ export default class Measure extends Node {
   toMarkdown(state, node) {
     state.write(
       "\n:::{measure}{" +
-        (node.attrs.child || Object.entries(Measure.delegates)[0][0]) +
+        (node.attrs.component || Object.entries(Measure.delegates)[0][0]) +
         "}" +
         JSON.stringify(node.attrs.state || {}) +
         "\n"
@@ -218,7 +218,7 @@ export default class Measure extends Node {
       getAttrs: tok => {
         const matches = tok.info.match(/^{measure}{(\w+)}(?:{(.*)})?$/);
         return {
-          child: matches[1],
+          component: matches[1],
           state: JSON.parse(`{${matches[2] || ""}}`),
         };
       },
