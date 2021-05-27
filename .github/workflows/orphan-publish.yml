@@ -21,6 +21,9 @@ jobs:
       - name: Compile Typescript
         run: yarn build
 
+      - name: Unignore dist Directory
+        run: "cat .gitignore | tail -n +2 > .gitignore.tmp && mv .gitignore.tmp .gitignore"
+
       - name: Deploy to Orphan Branch `build`
         uses: peaceiris/actions-gh-pages@v3
         with:
