@@ -1,0 +1,30 @@
+name: Orphan branch `build` auto publish
+
+on:
+  push:
+    branches:
+      - main  # Set a branch to deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Check source out
+        uses: actions/checkout@v2
+
+      - name: Apply NPM-Install Container
+        uses: bahmutov/npm-install@v1
+      
+      - name: Install NPM Packages via Yarn
+        run: yarn install
+
+      - name: Compile Typescript
+        run: yarn build
+
+      - name: Deploy to Orphan Branch `build`
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          external_repository: tud-ise/wegrade
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          publish_branch: build
