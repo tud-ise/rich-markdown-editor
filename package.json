@@ -108,7 +108,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/outline/rich-markdown-editor.git"
+    "url": "git+https://github.com/tud-ise/rich-markdown-editor.git"
   },
   "keywords": [
     "editor",
@@ -118,7 +118,7 @@
   ],
   "author": "Tom Moor <tom.moor@gmail.com>",
   "bugs": {
-    "url": "https://github.com/outline/rich-markdown-editor/issues"
+    "url": "https://github.com/tud-ise/rich-markdown-editor/issues"
   },
-  "homepage": "https://github.com/outline/rich-markdown-editor#readme"
+  "homepage": "https://github.com/tud-ise/rich-markdown-editor#readme"
 }
