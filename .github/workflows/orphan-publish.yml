@@ -24,7 +24,6 @@ jobs:
       - name: Deploy to Orphan Branch `build`
         uses: peaceiris/actions-gh-pages@v3
         with:
-          external_repository: tud-ise/wegrade
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
           publish_branch: build
